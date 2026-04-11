@@ -1,0 +1,49 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Inicio - Transportes Tobón";
+}
+
+<div class="container mt-5">
+    <div class="row align-items-center" style="min-height: 70vh;">
+        <div class="col-lg-6">
+            <h1 class="display-3 fw-bold text-primary">Transportes Tobón</h1>
+            <p class="lead text-muted">
+                Soluciones logísticas integrales para el transporte de carga pesada. 
+                Gestiona tu flota, conductores y pedidos en un solo lugar.
+            </p>
+            <div class="d-grid gap-3 d-md-flex justify-content-md-start mt-4">
+                <a asp-page="/Login" class="btn btn-primary btn-lg px-5 shadow">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Ingresar
+                </a>
+                <a asp-page="/Registro" class="btn btn-outline-secondary btn-lg px-5">
+                    <i class="bi bi-person-plus me-2"></i>Registrarse
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-6 text-center d-none d-lg-block">
+            <div class="display-1 text-primary shadow-sm p-5 rounded-circle bg-light d-inline-block">
+                <i class="bi bi-truck"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="row text-center mt-5">
+        <div class="col-md-4">
+            <i class="bi bi-shield-check text-success display-6"></i>
+            <h5 class="mt-3">Seguridad</h5>
+            <p class="small text-muted">Validación estricta de credenciales y roles.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="bi bi-geo-alt text-danger display-6"></i>
+            <h5 class="mt-3">Rastreo</h5>
+            <p class="small text-muted">Control total de rutas y destinos.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="bi bi-speedometer2 text-info display-6"></i>
+            <h5 class="mt-3">Eficiencia</h5>
+            <p class="small text-muted">Optimización de carga y tiempos de entrega.</p>
+        </div>
+    </div>
+</div>
