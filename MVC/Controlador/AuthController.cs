@@ -75,9 +75,7 @@ public async Task<IActionResult> Registro(Usuario nuevoUsuario)
     {
         await _usuarioDAO.RegistrarUsuario(nuevoUsuario);
         
-        // Al registrarse, lo mandamos al login o directo al Dashboard
-        // Si quieres que entre directo, deberías hacer el SignInAsync aquí también.
-        // Por ahora, lo mandaremos al Login para que estrene su cuenta:
+     
         TempData["SuccessMessage"] = "Cuenta creada con éxito. Ya puedes ingresar.";
         return RedirectToAction("Login"); 
     } 
