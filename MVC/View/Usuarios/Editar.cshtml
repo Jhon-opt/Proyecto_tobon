@@ -1,0 +1,53 @@
+@model TransportesTobonApp.MVC.Models.Usuario
+@{ 
+    ViewData["Title"] = "Editar Empleado"; 
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card shadow border-0">
+            <div class="card-header bg-primary text-white text-center py-3">
+                <h4 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Actualizar Datos</h4>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Editar" method="post">
+                    @* Campo oculto para que el ID viaje al servidor *@
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nombre Completo</label>
+                        <input type="text" asp-for="Nombre" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Correo Electrónico</label>
+                        <input type="email" asp-for="Email" class="form-control" required />
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Rol en la Empresa</label>
+                        <select asp-for="Rol" class="form-select" required>
+                            <option value="Administrador">Administrador</option>
+                            <option value="Operador">Operador</option>
+                            <option value="Conductor">Conductor</option>
+                        </select>
+                    </div>
+
+                    @if (ViewBag.Message != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.Message</div>
+                    }
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary shadow-sm">
+                            <strong>Guardar Cambios</strong>
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                        
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
