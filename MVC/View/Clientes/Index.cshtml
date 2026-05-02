@@ -1,0 +1,90 @@
+@model IEnumerable<TransportesTobonApp.MVC.Models.Cliente>
+@{
+    ViewData["Title"] = "Gestión de Clientes";
+    Layout = "_AdminLayout";
+    var filtro = ViewBag.Filtro as string ?? string.Empty;
+}
+
+<div class="page-header">
+    <h1>Gestión de Clientes</h1>
+    <p>Centraliza el registro, consulta, edición y seguimiento básico del historial de tus clientes.</p>
+</div>
+
+<div class="list-card">
+    <div class="list-card-header">
+        <h2>Listado de Clientes</h2>
+        <form asp-action="Index" method="get" class="search">
+            <i class="bi bi-search"></i>
+            <input type="text" name="filtro" value="@filtro" placeholder="Busque por nombre o NIT..." />
+        </form>
+        <button type="button" class="btn-soft"><i class="bi bi-funnel me-1"></i>Filtros</button>
+        <a asp-action="Crear" class="btn-primary-dark"><i class="bi bi-plus-lg me-1"></i>Registrar Nuevo Cliente</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="t-modern">
+            <thead>
+                <tr>
+                    <th>Cliente <i class="bi bi-arrow-down-up small"></i></th>
+                    <th>NIT/CC <i class="bi bi-arrow-down-up small"></i></th>
+                    <th>Email <i class="bi bi-arrow-down-up small"></i></th>
+                    <th>Teléfono <i class="bi bi-arrow-down-up small"></i></th>
+                    <th>Dirección <i class="bi bi-arrow-down-up small"></i></th>
+                    <th>Estado <i class="bi bi-arrow-down-up small"></i></th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (!Model.Any())
+            {
+                <tr><td colspan="7" class="text-center text-muted py-4">No se encontraron clientes.</td></tr>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    var inicial = string.IsNullOrWhiteSpace(item.Nombre) ? "?" : item.Nombre.Trim().Substring(0, 1).ToUpper();
+                    <tr>
+                        <td class="cell-strong">
+                            <span class="row-avatar">@inicial</span>@item.Nombre
+                        </td>
+                        <td>@item.NitCC</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.Email) ? "—" : item.Email)</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.Telefono) ? "—" : item.Telefono)</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.Direccion) ? "—" : item.Direccion)</td>
+                        <td>
+                            <span class="badge-state @(item.Estado ? "badge-active" : "badge-inactive")">
+                                @(item.Estado ? "Activo" : "Inactivo")
+                            </span>
+                            <form asp-action="ToggleEstado" method="post" style="display:inline"
+                                  onsubmit="@(item.Estado ? "return confirm('¿Desactivar a este cliente?\n\nNo podrá ser usado en nuevos pedidos. Su historial de servicios se conservará en modo solo lectura.');" : "")">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <input type="hidden" name="estadoActual" value="@item.Estado.ToString().ToLower()" />
+                                <label class="t-toggle ms-1">
+                                    <input type="checkbox" @(item.Estado ? "checked" : "") onchange="this.form.submit()" />
+                                    <span class="slider"></span>
+                                </label>
+                            </form>
+                        </td>
+                        <td>
+                            <div class="t-actions justify-content-end">
+                                <a class="btn-line" href="#"><i class="bi bi-eye me-1"></i>Ver Detalles</a>
+                                <a asp-action="Editar" asp-route-id="@item.Id" class="btn-line"><i class="bi bi-pencil me-1"></i>Editar</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="list-footer">
+        <span>Mostrando 1 a @Model.Count() de @Model.Count() clientes</span>
+        <div class="pager">
+            <button class="page" disabled>Anterior</button>
+            <button class="page active">1</button>
+            <button class="page" disabled>Siguiente</button>
+        </div>
+    </div>
+</div>

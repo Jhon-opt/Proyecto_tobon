@@ -63,7 +63,13 @@ namespace TransportesTobonApp.MVC.Controlador
         }
 
 
-        // Dentro de AuthController.cs
+        [HttpPost]
+        [Microsoft.AspNetCore.Authorization.Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
+        }
 
 [HttpGet]
 public IActionResult Registro() => View();

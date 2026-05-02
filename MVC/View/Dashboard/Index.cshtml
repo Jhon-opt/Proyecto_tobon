@@ -1,65 +1,59 @@
 @{
-    ViewData["Title"] = "Panel de Control - Transportes Tobón";
+    ViewData["Title"] = "Panel de Control";
+    Layout = "_AdminLayout";
 }
 
-<div class="container mt-5">
-    @* Usamos User.Identity para mostrar el nombre desde la Cookie *@
-    @if (User.Identity.IsAuthenticated)
+<div class="page-header">
+    <h1>Panel de Control</h1>
+    <p>Bienvenido, @User.Identity?.Name. Selecciona un módulo para comenzar.</p>
+</div>
+
+<div class="row g-3">
+    @if (User.IsInRole("Administrador"))
     {
-        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-            <i class="bi bi-person-check-fill me-2"></i>
-            <strong>¡Bienvenido de nuevo!</strong> Has ingresado como: @User.Identity.Name
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="col-md-4">
+            <div class="list-card h-100">
+                <div class="display-6 text-primary mb-2"><i class="bi bi-people"></i></div>
+                <h5 class="mb-1">Gestión de Usuarios</h5>
+                <p class="text-muted small">Consulta, edita y desactiva el personal de la plataforma.</p>
+                <a asp-controller="Usuarios" asp-action="Index" class="btn-primary-dark">Administrar</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="list-card h-100">
+                <div class="display-6 text-success mb-2"><i class="bi bi-person-vcard"></i></div>
+                <h5 class="mb-1">Gestión de Clientes</h5>
+                <p class="text-muted small">Registra, consulta y edita los clientes de la empresa.</p>
+                <a asp-controller="Clientes" asp-action="Index" class="btn-primary-dark">Administrar</a>
+            </div>
         </div>
     }
 
-    <div class="row">
-        <div class="col-md-12 mb-4">
-            <h2 class="border-bottom pb-2 text-secondary">Panel de Gestión Logística</h2>
+    <div class="col-md-4">
+        <div class="list-card h-100">
+            <div class="display-6 text-warning mb-2"><i class="bi bi-truck"></i></div>
+            <h5 class="mb-1">Flota de Vehículos</h5>
+            <p class="text-muted small">Control de estado y disponibilidad de camiones.</p>
+            <a asp-controller="Vehiculos" asp-action="Index" class="btn-primary-dark">Ver Flota</a>
         </div>
-        
-        @* Validamos el rol directamente desde la identidad del usuario *@
-        @if (User.IsInRole("Administrador"))
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm border-primary">
-                    <div class="card-body text-center">
-                        <div class="display-4 text-primary mb-3">
-                            <i class="bi bi-people"></i>
-                        </div>
-                        <h5 class="card-title">Gestión de Usuarios</h5>
-                        <p class="card-text text-muted">Consulta, edita y desactiva el personal de la plataforma.</p>
-                        @* Ajustamos los enlaces para que apunten a controladores MVC *@
-                        <a asp-controller="Usuarios" asp-action="Index" class="btn btn-primary w-100">Administrar</a>
-                    </div>
-                </div>
-            </div>
-        }
+    </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm border-info">
-                <div class="card-body text-center">
-                    <div class="display-4 text-info mb-3">
-                        <i class="bi bi-box-seam"></i>
-                    </div>
-                    <h5 class="card-title">Pedidos y Cargas</h5>
-                    <p class="card-text text-muted">Visualiza las solicitudes de transporte de los clientes.</p>
-                    <a href="#" class="btn btn-info text-white w-100">Ver Pedidos</a>
-                </div>
-            </div>
+    <div class="col-md-4">
+        <div class="list-card h-100">
+            <div class="display-6 text-info mb-2"><i class="bi bi-person-badge"></i></div>
+            <h5 class="mb-1">Conductores</h5>
+            <p class="text-muted small">Vigencia de licencias y disponibilidad operativa.</p>
+            <a asp-controller="Conductores" asp-action="Index" class="btn-primary-dark">Ver Conductores</a>
         </div>
+    </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm border-warning">
-                <div class="card-body text-center">
-                    <div class="display-4 text-warning mb-3">
-                        <i class="bi bi-truck"></i>
-                    </div>
-                    <h5 class="card-title">Flota de Vehículos</h5>
-                    <p class="card-text text-muted">Control de estado y disponibilidad de camiones.</p>
-                    <a asp-controller="Vehiculo" asp-action="Index" class="btn btn-warning text-white w-100">Ver Flota</a>
-                </div>
-            </div>
+    <div class="col-md-4">
+        <div class="list-card h-100">
+            <div class="display-6 text-secondary mb-2"><i class="bi bi-box-seam"></i></div>
+            <h5 class="mb-1">Pedidos y Cargas</h5>
+            <p class="text-muted small">Visualiza las solicitudes de transporte de los clientes.</p>
+            <a href="#" class="btn-primary-dark">Ver Pedidos</a>
         </div>
     </div>
 </div>

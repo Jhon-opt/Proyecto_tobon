@@ -1,14 +1,159 @@
-﻿@{
-    ViewData["Title"] = "Inicio - Transportes Tobón";
+@{
+    Layout = null;
+    ViewData["Title"] = "Transportes Tobón - Gestión Logística Inteligente";
 }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/landing.css" asp-append-version="true" />
+</head>
+<body class="land-body">
 
-<div class="container mt-5">
-    <div class="d-grid gap-3 d-md-flex justify-content-md-start mt-4">
-        <a asp-controller="Auth" asp-action="Login" class="btn btn-primary btn-lg px-5 shadow">
-            <i class="bi bi-box-arrow-in-right me-2"></i>Ingresar
-        </a>
-        <a asp-controller="Auth" asp-action="Registro" class="btn btn-outline-secondary btn-lg px-5">
-            <i class="bi bi-person-plus me-2"></i>Registrarse
-        </a>
-    </div>
-    </div>
+    <nav class="land-nav">
+        <div class="land-nav-inner">
+            <a class="land-brand" href="/">
+                <span class="land-brand-icon"><i class="bi bi-truck"></i></span>
+                Transportes Tobón
+            </a>
+            <a class="land-link" href="#features">Plataforma</a>
+            <a class="land-link" href="#metrics">Resultados</a>
+            <a class="land-link" href="#cta">Contacto</a>
+            <a asp-controller="Auth" asp-action="Login" class="land-btn land-btn-ghost">
+                <i class="bi bi-box-arrow-in-right"></i> Ingresar
+            </a>
+            <a asp-controller="Auth" asp-action="Registro" class="land-btn land-btn-primary">
+                <i class="bi bi-person-plus"></i> Registrarse
+            </a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-inner">
+            <div>
+                <span class="hero-pill">
+                    <span class="dot"></span> Plataforma activa · 24/7 monitoreo
+                </span>
+                <h1>Mueve tu carga, <span>controla tu flota</span> en tiempo real.</h1>
+                <p class="lead">
+                    Centraliza pedidos, conductores, vehículos y rutas en un solo panel.
+                    Toma decisiones con datos al instante y entrega más rápido, con menos costos.
+                </p>
+                <div class="hero-cta">
+                    <a asp-controller="Auth" asp-action="Login" class="land-btn land-btn-primary">
+                        <i class="bi bi-box-arrow-in-right"></i> Ingresar al sistema
+                    </a>
+                    <a asp-controller="Auth" asp-action="Registro" class="land-btn land-btn-ghost">
+                        <i class="bi bi-person-plus"></i> Crear cuenta
+                    </a>
+                </div>
+            </div>
+
+            <aside class="hero-card">
+                <div class="hero-card-title"><i class="bi bi-activity"></i> Operación de hoy</div>
+                <div class="hero-stat-row">
+                    <div class="hero-stat">
+                        <div class="stat-num">12</div>
+                        <div class="stat-label">Vehículos activos</div>
+                        <div class="stat-trend"><i class="bi bi-arrow-up-short"></i> 8% vs ayer</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="stat-num">37</div>
+                        <div class="stat-label">Pedidos en ruta</div>
+                        <div class="stat-trend"><i class="bi bi-arrow-up-short"></i> 12% vs ayer</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="stat-num">98%</div>
+                        <div class="stat-label">Entregas a tiempo</div>
+                        <div class="stat-trend"><i class="bi bi-check-circle"></i> dentro de meta</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="stat-num">4</div>
+                        <div class="stat-label">Alertas operativas</div>
+                        <div class="stat-trend" style="color:#fbbf24"><i class="bi bi-exclamation-triangle"></i> revisar flota</div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </header>
+
+    <section class="section" id="features">
+        <div class="section-inner">
+            <span class="section-eyebrow">Plataforma integral</span>
+            <h2 class="section-title">Todo lo que necesita la operación, en un solo lugar.</h2>
+            <p class="section-sub">
+                Diseñado por y para operadores logísticos. Cada módulo se conecta entre sí para
+                eliminar dobles digitaciones y reducir errores humanos.
+            </p>
+
+            <div class="feature-grid">
+                <div class="feature">
+                    <div class="feature-icon"><i class="bi bi-person-vcard"></i></div>
+                    <h3>Gestión de Clientes</h3>
+                    <p>Registra clientes con NIT/CC, contactos y notas internas. Historial siempre disponible y búsqueda al instante.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="bi bi-truck"></i></div>
+                    <h3>Flota de Vehículos</h3>
+                    <p>Capacidad, estado operativo y fecha de registro de cada camión. Activa o pausa unidades con un clic.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="bi bi-person-badge"></i></div>
+                    <h3>Conductores</h3>
+                    <p>Documento, licencia y disponibilidad operativa al instante. Asigna servicios sin fricción.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="bi bi-shield-lock"></i></div>
+                    <h3>Acceso por roles</h3>
+                    <p>Administrador, operador y conductor. Cada quién ve sólo lo que le corresponde, con bloqueo tras intentos fallidos.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="bi bi-box-seam"></i></div>
+                    <h3>Pedidos y rutas</h3>
+                    <p>Origen, destino, mercancía y peso. Se conectan automáticamente con vehículo y conductor disponible.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="bi bi-graph-up"></i></div>
+                    <h3>Reportes</h3>
+                    <p>Estado de la operación a la mano: vehículos, pedidos en ruta y entregas a tiempo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section metrics" id="metrics">
+        <div class="section-inner">
+            <span class="section-eyebrow">Resultados</span>
+            <h2 class="section-title">Operación visible, decisiones más rápidas.</h2>
+            <p class="section-sub">Cifras representativas de empresas similares operando con un sistema centralizado.</p>
+
+            <div class="metrics-grid">
+                <div class="metric"><div class="num">+30%</div><div class="lbl">Productividad operativa</div></div>
+                <div class="metric"><div class="num">-25%</div><div class="lbl">Tiempos muertos</div></div>
+                <div class="metric"><div class="num">99.5%</div><div class="lbl">Disponibilidad</div></div>
+                <div class="metric"><div class="num">24/7</div><div class="lbl">Monitoreo continuo</div></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="cta">
+        <div class="cta">
+            <h2>¿Listo para mover tu logística al siguiente nivel?</h2>
+            <p>Ingrese al panel administrativo o solicite acceso al equipo de Tobón.</p>
+            <a asp-controller="Auth" asp-action="Login" class="land-btn land-btn-primary">
+                <i class="bi bi-box-arrow-in-right"></i> Ingresar al sistema
+            </a>
+        </div>
+    </section>
+
+    <footer class="land-footer">
+        © 2026 Transportes Tobón S.A.S. — Universidad Distrital Francisco José de Caldas
+    </footer>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

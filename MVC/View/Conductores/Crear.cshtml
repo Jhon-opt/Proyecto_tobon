@@ -1,0 +1,60 @@
+@model TransportesTobonApp.MVC.Models.Conductor
+@{
+    ViewData["Title"] = "Registrar Conductor";
+    Layout = "_AdminLayout";
+}
+
+<div class="page-header">
+    <h1>Registrar Conductor</h1>
+    <p>Vincule un nuevo conductor al personal operativo de Transportes Tobón.</p>
+</div>
+
+<div class="list-card" style="max-width:720px">
+    <form asp-action="Crear" method="post">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger"
+             style="display:@(ViewData.ModelState.IsValid ? "none" : "block")"></div>
+
+        <div class="row g-3">
+            <div class="col-md-12">
+                <label class="form-label fw-bold">Nombre completo <span class="text-danger">*</span></label>
+                <input asp-for="Nombre" class="form-control" placeholder="Ej: Carlos Pérez" required />
+                <span asp-validation-for="Nombre" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Documento <span class="text-danger">*</span></label>
+                <input asp-for="Documento" class="form-control" placeholder="Ej: 1020304050" required />
+                <span asp-validation-for="Documento" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Licencia <span class="text-danger">*</span></label>
+                <input asp-for="Licencia" class="form-control" placeholder="Ej: B1234567" required />
+                <span asp-validation-for="Licencia" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Teléfono</label>
+                <input asp-for="Telefono" class="form-control" placeholder="Ej: 3001234567" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Estado inicial</label>
+                <select asp-for="Estado" class="form-select">
+                    @foreach (var e in TransportesTobonApp.MVC.Models.Conductor.EstadosValidos)
+                    {
+                        <option value="@e">@e</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-danger mt-3">@ViewBag.Message</div>
+        }
+
+        <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn-primary-dark"><i class="bi bi-check2 me-1"></i>Registrar Conductor</button>
+            <a asp-action="Index" class="btn-soft">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

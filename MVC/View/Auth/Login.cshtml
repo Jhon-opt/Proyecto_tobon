@@ -1,60 +1,82 @@
 @model TransportesTobonApp.MVC.Models.Usuario
 @{
-    ViewData["Title"] = "Acceso - Transportes Tobón";
+    ViewData["Title"] = "Iniciar Sesión";
+    Layout = "_AuthLayout";
 }
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card border-0 shadow-lg">
-                <div class="card-header bg-primary text-white text-center py-4">
-                    <h3 class="mb-0 fw-bold">Transportes Tobón</h3>
-                    <small class="text-uppercase tracking-wider">Gestión Logística Integral</small>
-                </div>
-                <div class="card-body p-5">
-                    <form asp-controller="Auth" asp-action="Login" method="post">
-                        
-                        <div class="mb-4">
-                            <label class="form-label fw-bold text-secondary">Correo Corporativo</label>
-                            <div class="input-group border rounded shadow-sm">
-                                <span class="input-group-text bg-white border-0"><i class="bi bi-envelope text-primary"></i></span>
-                                <input type="email" asp-for="Email" class="form-control border-0" placeholder="ejemplo@transportestobon.com" required />
-                            </div>
-                        </div>
+<h1 class="form-title">Iniciar Sesión</h1>
+<p class="form-lead">Ingrese sus credenciales para acceder al sistema.</p>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold text-secondary">Contraseña</label>
-                            <div class="input-group border rounded shadow-sm">
-                                <span class="input-group-text bg-white border-0"><i class="bi bi-lock text-primary"></i></span>
-                                <input type="password" asp-for="Password" class="form-control border-0" placeholder="••••••••" required />
-                            </div>
-                        </div>
-
-                        <div class="mb-4 d-flex justify-content-between align-items-center">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="recordar" name="RememberMe">
-                                <label class="form-check-label small text-muted" for="recordar">Recordar sesión</label>
-                            </div>
-                            <a href="#" class="small text-primary text-decoration-none">¿Olvidó su clave?</a>
-                        </div>
-
-                        @* Manejo de errores desde el Controlador (HU-002) *@
-                        @if (ViewBag.Message != null)
-                        {
-                            <div class="alert alert-danger py-2 text-center border-0 shadow-sm mb-4">
-                                <i class="bi bi-exclamation-triangle-fill me-2"></i> @ViewBag.Message
-                            </div>
-                        }
-
-                        <button type="submit" class="btn btn-primary w-100 py-2 shadow-sm border-0">
-                            <span class="h6 mb-0 text-uppercase fw-bold">Ingresar al Sistema</span>
-                        </button>
-                    </form>
-                </div>
-                <div class="card-footer bg-light text-center py-3 border-0">
-                    <span class="text-muted small">&copy; 2026 - Universidad Distrital Francisco José de Caldas</span>
-                </div>
-            </div>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert-soft alert-success">
+        <div class="alert-icon"><i class="bi bi-check"></i></div>
+        <div class="alert-body">
+            <strong>Listo</strong>
+            <small>@TempData["SuccessMessage"]</small>
         </div>
     </div>
+}
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert-soft">
+        <div class="alert-icon"><i class="bi bi-exclamation"></i></div>
+        <div class="alert-body">
+            <strong>Credenciales inválidas</strong>
+            <small>@ViewBag.Message</small>
+        </div>
+    </div>
+}
+
+<form asp-controller="Auth" asp-action="Login" method="post">
+    <div class="field">
+        <label class="field-label" for="email">Correo Electrónico</label>
+        <div class="field-input @(ViewBag.Message != null ? "is-invalid" : "")">
+            <i class="bi bi-envelope leading-icon"></i>
+            <input id="email" type="email" name="email" placeholder="admin@transportestobon.com" required autofocus />
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="field-label" for="password">
+            <span>Contraseña</span>
+            <a class="helper-link" href="#">¿Olvidó su contraseña?</a>
+        </label>
+        <div class="field-input @(ViewBag.Message != null ? "is-invalid" : "")">
+            <i class="bi bi-lock leading-icon"></i>
+            <input id="password" type="password" name="password" placeholder="••••••••••••" required />
+            <button type="button" class="trailing-btn" onclick="togglePwd()" aria-label="Mostrar contraseña">
+                <i class="bi bi-eye-slash" id="pwdIcon"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="row-line">
+        <input type="checkbox" id="recordar" name="RememberMe" checked />
+        <label for="recordar">Recordar sesión</label>
+    </div>
+
+    <button type="submit" class="btn-auth">
+        Ingresar al Sistema <i class="bi bi-arrow-right"></i>
+    </button>
+</form>
+
+<div class="auth-foot">
+    ¿Necesita acceso? <a asp-action="Registro">Contacte al administrador</a>
+    <div class="auth-icons">
+        <i class="bi bi-question-circle"></i>
+        <i class="bi bi-shield-lock"></i>
+    </div>
 </div>
+
+@section Scripts {
+<script>
+    function togglePwd() {
+        var input = document.getElementById('password');
+        var icon = document.getElementById('pwdIcon');
+        if (input.type === 'password') { input.type = 'text'; icon.className = 'bi bi-eye'; }
+        else { input.type = 'password'; icon.className = 'bi bi-eye-slash'; }
+    }
+</script>
+}

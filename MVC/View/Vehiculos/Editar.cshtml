@@ -1,0 +1,92 @@
+@model TransportesTobonApp.MVC.Models.Vehiculo
+@{
+    ViewData["Title"] = "Editar Vehículo";
+    Layout = "_AdminLayout";
+    bool requiereConf = ViewBag.RequiereConfirmacion ?? false;
+}
+
+<div class="page-header">
+    <h1>Editar Vehículo</h1>
+    <p>Actualice la información o cambie el estado operativo del vehículo.</p>
+</div>
+
+<div class="list-card" style="max-width:720px">
+    <form asp-action="Editar" method="post">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Placa" />
+        <input type="hidden" asp-for="ServiciosActivos" />
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Placa (no editable)</label>
+                <input value="@Model.Placa" class="form-control" readonly disabled />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Modelo <span class="text-danger">*</span></label>
+                <input asp-for="Modelo" class="form-control" required />
+                <span asp-validation-for="Modelo" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Capacidad (toneladas)</label>
+                <input asp-for="CapacidadToneladas" type="number" step="0.01" min="0" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Estado operativo</label>
+                <select asp-for="Estado" class="form-select" id="estadoSelect">
+                    @foreach (var e in TransportesTobonApp.MVC.Models.Vehiculo.EstadosValidos)
+                    {
+                        <option value="@e">@e</option>
+                    }
+                </select>
+                @if (Model.EnServicio)
+                {
+                    <small class="text-warning">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        Vehículo asignado a @Model.ServiciosActivos servicio(s) activo(s).
+                    </small>
+                }
+            </div>
+        </div>
+
+        @if (requiereConf)
+        {
+            <div class="alert alert-warning mt-3">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                @ViewBag.Message
+                <div class="form-check mt-2">
+                    <input type="checkbox" name="confirmado" value="true" id="confirmar" class="form-check-input" />
+                    <label for="confirmar" class="form-check-label">
+                        Sí, deseo cambiar el estado aunque tenga servicios activos.
+                    </label>
+                </div>
+            </div>
+        }
+        else if (ViewBag.Message != null)
+        {
+            <div class="alert alert-danger mt-3">@ViewBag.Message</div>
+        }
+
+        <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn-primary-dark"><i class="bi bi-check2 me-1"></i>Guardar Cambios</button>
+            <a asp-action="Index" class="btn-soft">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @if (Model.EnServicio)
+    {
+        <script>
+        // HU-008: confirmación cuando el usuario intenta marcar como no-disponible
+        document.querySelector('form').addEventListener('submit', function (e) {
+            var sel = document.getElementById('estadoSelect');
+            var conf = document.getElementById('confirmar');
+            var noDisp = ['Mantenimiento','Averiado'];
+            if (noDisp.indexOf(sel.value) !== -1 && (!conf || !conf.checked)) {
+                if (!confirm('Este vehículo tiene servicios activos. ¿Continuar?')) e.preventDefault();
+            }
+        });
+        </script>
+    }
+}

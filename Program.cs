@@ -23,6 +23,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Cierre automático por inactividad
     });
     builder.Services.AddScoped<UsuarioDAO>();
+    builder.Services.AddScoped<ClienteDAO>();
+    builder.Services.AddScoped<VehiculoDAO>();
+    builder.Services.AddScoped<ConductorDAO>();
 
 var app = builder.Build();
 

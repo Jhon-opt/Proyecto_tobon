@@ -1,14 +1,14 @@
-@model IEnumerable<TransportesTobonApp.MVC.Models.Vehiculo>
+@model IEnumerable<TransportesTobonApp.MVC.Models.Conductor>
 @{
-    ViewData["Title"] = "Gestión de Flota";
+    ViewData["Title"] = "Gestión de Conductores";
     Layout = "_AdminLayout";
     var filtro = ViewBag.Filtro as string ?? string.Empty;
     var estado = ViewBag.Estado as string ?? string.Empty;
 }
 
 <div class="page-header">
-    <h1>Gestión de Flota</h1>
-    <p>Registro, control y monitoreo preventivo de los camiones de Transportes Tobón.</p>
+    <h1>Gestión de Conductores</h1>
+    <p>Control de personal, vigencia de licencias y disponibilidad operativa.</p>
 </div>
 
 @if (TempData["WarningMessage"] != null)
@@ -21,32 +21,32 @@
 
 <div class="list-card">
     <div class="list-card-header">
-        <h2>Gestión de Flota de Vehículos</h2>
+        <h2>Gestión de Conductores</h2>
         <form asp-action="Index" method="get" class="search">
             <i class="bi bi-search"></i>
-            <input type="text" name="filtro" value="@filtro" placeholder="Buscar por placa o modelo..." />
+            <input type="text" name="filtro" value="@filtro" placeholder="Buscar por nombre o documento..." />
             @if (!string.IsNullOrEmpty(estado)) { <input type="hidden" name="estado" value="@estado" /> }
         </form>
         <form asp-action="Index" method="get" class="d-inline">
             @if (!string.IsNullOrEmpty(filtro)) { <input type="hidden" name="filtro" value="@filtro" /> }
             <select name="estado" class="btn-soft" onchange="this.form.submit()" style="padding-right:32px">
                 <option value="">Todos los estados</option>
-                <option value="Disponible"     selected="@(estado == "Disponible")">Disponible</option>
-                <option value="Mantenimiento"  selected="@(estado == "Mantenimiento")">En mantenimiento</option>
-                <option value="Averiado"       selected="@(estado == "Averiado")">Averiado</option>
+                <option value="Disponible"   selected="@(estado == "Disponible")">Disponible</option>
+                <option value="En descanso"  selected="@(estado == "En descanso")">En descanso</option>
+                <option value="Incapacitado" selected="@(estado == "Incapacitado")">Incapacitado</option>
             </select>
         </form>
-        <a asp-action="Crear" class="btn-primary-dark"><i class="bi bi-plus-lg me-1"></i>Nuevo Vehículo</a>
+        <a asp-action="Crear" class="btn-primary-dark"><i class="bi bi-plus-lg me-1"></i>Vincular Conductor</a>
     </div>
 
     <div class="table-responsive">
         <table class="t-modern">
             <thead>
                 <tr>
-                    <th>Vehículo</th>
-                    <th>Placa</th>
-                    <th>Modelo / Capacidad</th>
-                    <th>Fecha de registro</th>
+                    <th>Conductor</th>
+                    <th>Documento</th>
+                    <th>Licencia</th>
+                    <th>Teléfono</th>
                     <th>Servicios activos</th>
                     <th>Estado operativo</th>
                     <th class="text-end">Acciones</th>
@@ -55,44 +55,42 @@
             <tbody>
             @if (!Model.Any())
             {
-                <tr><td colspan="7" class="text-center text-muted py-4">No se encontraron vehículos.</td></tr>
+                <tr><td colspan="7" class="text-center text-muted py-4">No se encontraron conductores.</td></tr>
             }
             else
             {
-                foreach (var v in Model)
+                foreach (var c in Model)
                 {
-                    var disponible    = v.Estado == "Disponible";
-                    var enMant        = v.Estado == "Mantenimiento";
-                    var averiado      = v.Estado == "Averiado";
-                    var badgeClass    = disponible ? "badge-active" : enMant ? "badge-inactive" : "badge-danger";
-                    var siguiente     = disponible ? "Mantenimiento" : "Disponible";
-                    var requiereConf  = (v.EnServicio && (siguiente == "Mantenimiento" || siguiente == "Averiado"));
+                    var inicial = string.IsNullOrWhiteSpace(c.Nombre) ? "?" : c.Nombre.Trim().Substring(0,1).ToUpper();
+                    var disponible    = c.Estado == "Disponible";
+                    var enDescanso    = c.Estado == "En descanso";
+                    var incapacitado  = c.Estado == "Incapacitado";
+                    var badgeClass    = disponible ? "badge-active" : enDescanso ? "badge-inactive" : "badge-danger";
+                    var siguiente     = disponible ? "En descanso" : "Disponible";
+                    var requiereConf  = (c.EnServicio && TransportesTobonApp.MVC.Models.Conductor.EstadosNoDisponibles.Contains(siguiente));
                     <tr>
                         <td class="cell-strong">
-                            <i class="bi bi-truck row-icon-truck"></i>T-@v.Id.ToString("000")
+                            <span class="row-avatar">@inicial</span>@c.Nombre
                         </td>
-                        <td>@v.Placa</td>
-                        <td>@v.Modelo @(v.CapacidadToneladas.HasValue ? $"/ {v.CapacidadToneladas:0.##} Ton" : "")</td>
-                        <td>@v.FechaRegistro.ToString("dd/MM/yyyy")</td>
+                        <td>CC @c.Documento</td>
+                        <td>@c.Licencia</td>
+                        <td>@(string.IsNullOrWhiteSpace(c.Telefono) ? "—" : c.Telefono)</td>
                         <td>
-                            @if (v.EnServicio)
+                            @if (c.EnServicio)
                             {
                                 <span class="badge-state badge-inactive" title="Asignado a servicio activo">
-                                    <i class="bi bi-link-45deg me-1"></i>@v.ServiciosActivos
+                                    <i class="bi bi-link-45deg me-1"></i>@c.ServiciosActivos
                                 </span>
                             }
-                            else
-                            {
-                                <span class="text-muted">—</span>
-                            }
+                            else { <span class="text-muted">—</span> }
                         </td>
                         <td>
                             <form asp-action="CambiarEstado" method="post" class="d-inline js-cambio-estado"
                                   data-requiere-conf="@(requiereConf ? "1" : "0")"
-                                  data-recurso="vehículo @v.Placa"
-                                  data-activos="@v.ServiciosActivos"
+                                  data-recurso="conductor @c.Nombre"
+                                  data-activos="@c.ServiciosActivos"
                                   data-siguiente="@siguiente">
-                                <input type="hidden" name="id" value="@v.Id" />
+                                <input type="hidden" name="id" value="@c.Id" />
                                 <input type="hidden" name="nuevoEstado" value="@siguiente" />
                                 <input type="hidden" name="confirmado" value="false" />
                                 <label class="t-toggle">
@@ -101,12 +99,12 @@
                                 </label>
                             </form>
                             <div class="mt-1">
-                                <span class="badge-state @badgeClass">@v.Estado</span>
+                                <span class="badge-state @badgeClass">@c.Estado</span>
                             </div>
                         </td>
                         <td>
                             <div class="t-actions justify-content-end">
-                                <a class="btn-line" asp-action="Editar" asp-route-id="@v.Id"><i class="bi bi-pencil me-1"></i>Editar</a>
+                                <a class="btn-line" asp-action="Editar" asp-route-id="@c.Id"><i class="bi bi-pencil me-1"></i>Editar</a>
                             </div>
                         </td>
                     </tr>
@@ -117,7 +115,7 @@
     </div>
 
     <div class="list-footer">
-        <span>Mostrando 1 a @Model.Count() de @Model.Count() vehículos</span>
+        <span>Mostrando 1 a @Model.Count() de @Model.Count() conductores</span>
         <div class="pager">
             <button class="page" disabled>Anterior</button>
             <button class="page active">1</button>
@@ -126,7 +124,7 @@
     </div>
 </div>
 
-@* CdP_007: modal Bootstrap de advertencia para cambio de estado con servicios activos *@
+@* CdP_010: modal Bootstrap de advertencia para cambio de estado con servicios activos *@
 <div class="modal fade" id="modalServiciosActivos" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -163,9 +161,9 @@
         const requiereConf = form.dataset.requiereConf === '1';
         if (!requiereConf) { form.submit(); return; }
 
-        const recurso  = form.dataset.recurso;
-        const activos  = form.dataset.activos;
-        const sig      = form.dataset.siguiente;
+        const recurso = form.dataset.recurso;
+        const activos = form.dataset.activos;
+        const sig     = form.dataset.siguiente;
         document.getElementById('modalRecursoTexto').innerHTML =
             'El <strong>' + recurso + '</strong> tiene <strong>' + activos +
             ' servicio(s) activo(s)</strong>. Va a cambiar su estado a <strong>' + sig + '</strong>.';

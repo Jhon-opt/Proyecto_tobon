@@ -1,76 +1,86 @@
 @model TransportesTobonApp.MVC.Models.Usuario
 @{
-    ViewData["Title"] = "Registro - Transportes Tobón";
+    ViewData["Title"] = "Crear Cuenta";
+    Layout = "_AuthLayout";
+    ViewData["AuthHeading"] = "Únase al equipo Tobón";
+    ViewData["AuthSubtitle"] = "Cree su cuenta corporativa para administrar pedidos, flota y clientes desde un solo panel.";
 }
 
-<div class="row justify-content-center mt-5">
-    <div class="col-md-5">
-        <div class="card shadow border-0">
-            <div class="card-header bg-success text-white text-center py-3">
-                <h4 class="mb-0">Crear Cuenta</h4>
-                <small>Transportes Tobón - Gestión Logística</small>
-            </div>
-            <div class="card-body p-4">
-                <form asp-controller="Auth" asp-action="Registro" method="post">
-                    <div class="mb-3">
-                        <label class="form-label font-weight-bold">Nombre Completo</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-person"></i></span>
-                            <input type="text" asp-for="Nombre" class="form-control" placeholder="Ej: Juan Pérez" required />
-                        </div>
-                    </div>
+<h1 class="form-title">Crear Cuenta</h1>
+<p class="form-lead">Diligencie sus datos para registrar un nuevo usuario en el sistema.</p>
 
-                    <div class="mb-3">
-                        <label class="form-label font-weight-bold">Correo Electrónico</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                            <input type="email" asp-for="Email" class="form-control" placeholder="usuario@transportestobon.com" required />
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label font-weight-bold">Contraseña</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                            <input type="password" asp-for="Password" class="form-control" placeholder="••••••••" required />
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label font-weight-bold">Tipo de Empleado (Rol)</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-briefcase"></i></span>
-                            <select asp-for="Rol" class="form-select" required>
-                                <option value="" selected disabled>Seleccione un cargo...</option>
-                                <option value="Administrador">Administrador</option>
-                                <option value="Operador">Operador</option>
-                                <option value="Conductor">Conductor</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    @if (ViewBag.Message != null)
-                    {
-                        <div class="alert alert-warning py-2 text-center shadow-sm">
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i> @ViewBag.Message
-                        </div>
-                    }
-
-                    <button type="submit" class="btn btn-success w-100 py-2 shadow-sm mb-3">
-                        <strong>Finalizar Registro</strong>
-                    </button>
-
-                    <hr />
-
-                    <div class="text-center">
-                        <span class="text-muted small">¿Ya tienes una cuenta corporativa?</span><br />
-                        <a asp-controller="Auth" asp-action="Login" class="text-decoration-none fw-bold">Iniciar Sesión</a>
-                    </div>
-                </form>
-            </div>
-            <div class="card-footer bg-light text-center py-3">
-                <span class="text-muted extra-small">&copy; 2026 Transportes Tobón S.A.S.</span>
-            </div>
+@if (ViewBag.Message != null)
+{
+    <div class="alert-soft">
+        <div class="alert-icon"><i class="bi bi-exclamation"></i></div>
+        <div class="alert-body">
+            <strong>No fue posible registrar</strong>
+            <small>@ViewBag.Message</small>
         </div>
     </div>
+}
+
+<form asp-controller="Auth" asp-action="Registro" method="post">
+    <div class="field">
+        <label class="field-label" for="Nombre">Nombre Completo</label>
+        <div class="field-input">
+            <i class="bi bi-person leading-icon"></i>
+            <input id="Nombre" asp-for="Nombre" placeholder="Ej: Juan Pérez" required autofocus />
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="field-label" for="Email">Correo Electrónico</label>
+        <div class="field-input">
+            <i class="bi bi-envelope leading-icon"></i>
+            <input id="Email" asp-for="Email" type="email" placeholder="usuario@transportestobon.com" required />
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="field-label" for="Password">Contraseña</label>
+        <div class="field-input">
+            <i class="bi bi-lock leading-icon"></i>
+            <input id="Password" asp-for="Password" type="password" placeholder="••••••••" required />
+            <button type="button" class="trailing-btn" onclick="togglePwd()" aria-label="Mostrar contraseña">
+                <i class="bi bi-eye-slash" id="pwdIcon"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="field-label" for="Rol">Tipo de Empleado (Rol)</label>
+        <div class="field-input">
+            <i class="bi bi-briefcase leading-icon"></i>
+            <select id="Rol" asp-for="Rol" required>
+                <option value="" selected disabled>Seleccione un cargo...</option>
+                <option value="Administrador">Administrador</option>
+                <option value="Operador">Operador</option>
+                <option value="Conductor">Conductor</option>
+            </select>
+        </div>
+    </div>
+
+    <button type="submit" class="btn-auth">
+        Finalizar Registro <i class="bi bi-arrow-right"></i>
+    </button>
+</form>
+
+<div class="auth-foot">
+    ¿Ya tiene una cuenta corporativa? <a asp-action="Login">Iniciar sesión</a>
+    <div class="auth-icons">
+        <i class="bi bi-question-circle"></i>
+        <i class="bi bi-shield-lock"></i>
+    </div>
 </div>
+
+@section Scripts {
+<script>
+    function togglePwd() {
+        var input = document.getElementById('Password');
+        var icon = document.getElementById('pwdIcon');
+        if (input.type === 'password') { input.type = 'text'; icon.className = 'bi bi-eye'; }
+        else { input.type = 'password'; icon.className = 'bi bi-eye-slash'; }
+    }
+</script>
+}
